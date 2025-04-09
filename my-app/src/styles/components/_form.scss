@@ -1,0 +1,63 @@
+@use '../base/variables' as *;
+@use '../base/mixins' as *;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  
+    &__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    } 
+  
+    &__label {
+        width: 160px;
+        @include font-card-lebel();
+
+        &--auto {
+            width: auto;
+            padding: 0 12px;
+        }
+    }
+
+    &__input,
+    &__select {
+        padding: 10px 12px;
+        border: 1px solid $black-20;
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 0.2s ease;
+        @include font-card-value();
+  
+      &:hover {
+        border-color: $black-50;
+      }
+
+      &:focus {
+        border-color: #35CDFD;
+      }
+    }
+  
+    &__input {
+        max-width: 168px;
+        height: 40px;
+        width: 100%;
+
+        &--long {
+          max-width: 420px;
+        }
+    }
+
+    &__select {
+        width: 420px;
+        height: 40px;
+        appearance: none;
+        background-image: url('/img/Inputs_icon.svg');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 20px;
+    }
+  }
+  

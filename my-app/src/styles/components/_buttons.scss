@@ -1,0 +1,20 @@
+@use '../base/mixins' as *;
+
+.filled-btn {
+    @include filled-button();
+    @include font-btn();
+}
+
+.outline-btn {
+    @include outline-button();
+    @include font-btn();
+}
+
+.flattened-btn {
+    @include flattened-button();
+    @include font-flattened-btn();
+}
+
+.icon-btn {
+    @include icon-button();
+}

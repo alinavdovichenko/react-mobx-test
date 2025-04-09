@@ -1,0 +1,196 @@
+@use '../base/variables' as *;
+
+// buttons -------------------------------
+@mixin button-base() {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 210px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  svg {
+    position: absolute;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@mixin filled-button() {
+  @include button-base;
+  border: none;
+  background: $brand-primary;
+  color: $white-95;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.12);
+
+  svg {
+    stroke: $white-100;
+  }
+
+  &:hover {
+    background-color: #626262;
+
+    svg {
+      stroke: $white-100;
+    }
+  }
+
+  &:active {
+    background-color: #767676;
+
+    svg {
+      stroke: $white-100;
+    }
+  }
+}
+
+@mixin outline-button() {
+  @include button-base;
+  border: 1px solid $black-20;
+  background: transparent;
+  color: $brand-primary;
+
+  svg {
+    stroke: $brand-primary;
+  }
+
+  &:hover {
+    color: $brand-secondary;
+
+    svg {
+      stroke: $brand-secondary;
+    }
+  }
+
+  &:active {
+    border: 1px solid $brand-variant;
+    color: $brand-variant;
+
+    svg {
+      stroke: $brand-variant;
+    }
+  }
+}
+
+@mixin flattened-button() {
+  @include outline-button;
+  justify-content: end;
+  width: auto;
+  height: 28px;
+
+  svg {
+    left: 8px;
+    stroke: $brand-primary;
+  }
+
+  &:hover {
+    color: $brand-secondary;
+
+    svg {
+      stroke: $brand-secondary;
+    }
+  }
+
+  &:active {
+    border: 1px solid $brand-variant;
+    color: $brand-variant;
+
+    svg {
+      stroke: $brand-variant;
+    }
+  }
+}
+
+@mixin icon-button() {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: $brand-primary;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    svg {
+      stroke: $white-100;
+    }
+
+    &:hover {
+      background-color: #626262;
+    }
+
+    &:active {
+      background-color: #767676;
+    }
+}
+
+// tipography -----------------------------
+@mixin accent-bold() {
+  font-family: 'PoppinsBold', sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  color: $black-80;
+}
+
+@mixin font-flattened-btn() {
+  font-family: 'PoppinsSemiBold', sans-serif;
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  padding-right: 12px;
+  padding-left: 36px;
+}
+
+@mixin font-btn() {
+  font-family: 'PoppinsSemiBold', sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+}
+
+@mixin font-header() {
+  font-family: 'PoppinsMedium', sans-serif;
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+}
+
+@mixin font-card-lebel() {
+  font-family: 'PoppinsRegular', sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  color: $black-50;
+}
+
+@mixin font-medium-lebel() {
+  font-family: 'PoppinsMedium', sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  color: $black-50;
+}
+
+@mixin font-card-value() {
+  font-family: 'PoppinsRegular', sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: $black-80;
+}

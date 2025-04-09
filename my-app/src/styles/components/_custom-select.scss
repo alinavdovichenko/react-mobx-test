@@ -1,0 +1,129 @@
+@use '../base/variables' as *;
+@use '../base/mixins' as *;
+
+.custom-select {
+  position: relative;
+  @include font-card-value();
+  width: 100%;
+  max-width: 420px;
+
+  &.open &__selected {
+    border-color: $assistitive-focus;
+  }
+
+  &__selected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $white-100;
+    border: 1px solid $black-20;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    min-height: 40px;
+    flex-wrap: nowrap;
+    gap: 12px;
+
+    > span {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &:hover {
+      border-color: $black-50;
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% - 4px);
+    left: 0;
+    right: 0;
+    background: $white-100;
+    border-radius: 8px;
+    box-shadow: 0px -1px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16);
+    z-index: 10;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 8px 0;
+
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: all 0.25s ease;
+  }
+
+  &__dropdown.open {
+    opacity: 1;
+    transform: translateY(3px);
+    pointer-events: auto;
+  }
+
+  &__option {
+    padding: 12px 16px;
+    @include font-card-lebel();
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: $black-80;
+
+    &:hover {
+      background: $black-3;
+    }
+
+    &.selected {
+      @include font-medium-lebel();
+      background: $black-5;
+      color: $brand-primary;
+    }
+  }
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  input {
+    position: absolute;
+    opacity: 0;
+
+    &:checked + .checkmark .check-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    border: 1px solid $black-30;
+    border-radius: 4px;
+    background-color: $white-100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .check-icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.2s ease;
+    }
+  }
+}

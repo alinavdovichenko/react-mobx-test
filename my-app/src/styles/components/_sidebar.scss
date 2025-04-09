@@ -1,0 +1,104 @@
+@use '../base/variables' as *;
+@use '../base/mixins' as *;
+
+.sidebar {
+  display: flex;
+  width: 300px;
+  background-color: $white-100;
+  color: $black-80;
+  box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.08);
+
+  &__line-top {
+    border-top: 1px solid $white-20;
+    width: 20px;
+    margin: 0 auto;
+  }
+
+  // Левая вертикальная колонка с иконками
+  &__left-bar {
+    width: 48px;
+    background-color: $brand-primary;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 6px;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    
+    img {
+      width: 36px;
+      height: 36px;
+    }
+
+    &:hover {
+      background-color: $white-20;
+      border-radius: 8px;
+    }
+  }
+
+  &__icon-wrapper {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 20px;
+    
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+  }
+
+  // Основная часть сайдбара
+  &__main {
+    flex: 1;
+    padding: 20px 20px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
+  &__logo-text {
+    @include accent-bold();
+  }
+
+  &__role {
+    font-family: 'PoppinsRegular', serif;
+    font-size: 11px;
+    color: $black-80;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__footer {
+    font-size: 0.75em;
+    text-align: center;
+    color: $text-light;
+  }
+
+}

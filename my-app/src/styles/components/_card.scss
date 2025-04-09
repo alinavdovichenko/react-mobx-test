@@ -1,0 +1,92 @@
+@use '../base/variables' as *;
+@use '../base/mixins' as *;
+
+.card {
+  width: 640px;
+  background: $white-100;
+  border-radius: $border-radius;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  margin-bottom: 16px;
+  padding: 24px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    @include accent-bold();
+    margin: 0;
+  }
+
+  &__edit-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__body {
+    padding-top: 16px;
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: max-content auto;
+      gap: 8px 12px;
+  
+      .grid-item {
+  
+        &.label {
+          width: 160px;
+          @include font-card-lebel();
+        }
+  
+        &.value {
+          @include font-card-value();
+
+          span {
+            color: $black-30;
+          }
+        }
+      }
+    }
+  }
+
+  &__photos-list {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__photo-item {
+    position: relative;
+    width: 144px;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  &__photo-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: $brand-primary;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    svg {
+      stroke: $white-100;
+    }
+
+    &:hover {
+      background-color: #626262;
+    }
+
+    &:active {
+      background-color: #767676;
+    }
+  }
+}
