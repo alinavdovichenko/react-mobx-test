@@ -1,21 +1,31 @@
 import { makeAutoObservable } from 'mobx';
-import { saveToken, dropToken, getToken } from '../api/token';
+import { createAPI } from '../api/api';
+import { saveToken } from '../api/token';
 
-class AuthStore {
-  token: string = getToken();
+const api = createAPI;
+
+export class AuthStore {
+  token: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setToken(token: string) {
-    this.token = token;
-    saveToken(token);
+  async login(username: string) {
+    const response = await api.get('/auth', {
+      params: { user: username },
+    });
+
+    const authHeader = response.headers['authorization'];
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1]; // убираем "Bearer "
+      this.token = token;
+      saveToken(token);
+    }
   }
 
-  clearToken() {
-    this.token = '';
-    dropToken();
+  get isAuthenticated() {
+    return !!this.token;
   }
 }
 

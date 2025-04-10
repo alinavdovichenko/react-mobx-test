@@ -1,9 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import axios from "axios";
+import { createAPI } from "../api/api";
+import { ApiRoute } from "../api/routes";
 import type { CompanyType } from "../type/CompanyType";
-import type { ContactType  } from "../type/ContactType";
+import type { ContactType } from "../type/ContactType";
 
-const API_URL = "https://test-task-api.allfuneral.com";
+const api = createAPI;
 
 class CompanyStore {
   token = "";
@@ -18,63 +19,80 @@ class CompanyStore {
 
   async auth(username: string) {
     try {
-      const response = await axios.get(`${API_URL}/auth`, {
+      const response = await api.get(`${ApiRoute.Auth}`, {
         params: { user: username },
       });
 
-      runInAction(() => {
-        this.token = response.headers["authorization"];
-        axios.defaults.headers.common["Authorization"] = this.token;
-      });
+      const token = response.headers["authorization"];
+      if (token) {
+        runInAction(() => {
+          this.token = token;
+          api.defaults.headers.common["Authorization"] = token;
+        });
+      }
     } catch (e) {
       console.error("Auth error", e);
-      this.error = "Ошибка авторизации";
+      runInAction(() => {
+        this.error = "Ошибка авторизации";
+      });
     }
   }
 
   async fetchCompany(id: number) {
     this.loading = true;
     try {
-      const response = await axios.get<CompanyType>(`${API_URL}/companies/${id}`);
+      const response = await api.get<CompanyType>(`${ApiRoute.Company}/${id}`);
       runInAction(() => {
         this.company = response.data;
         this.loading = false;
       });
     } catch (e) {
       console.error("fetchCompany error", e);
-      this.error = "Ошибка загрузки данных компании";
+      runInAction(() => {
+        this.error = "Ошибка загрузки данных компании";
+        this.loading = false;
+      });
     }
   }
 
-  async fetchContact(id: number) {
+  async fetchContact(id: string) {
     try {
-      const response = await axios.get<ContactType>(`${API_URL}/contacts/${id}`);
+      const response = await api.get<ContactType>(`${ApiRoute.Contact}/${id}`);
       runInAction(() => {
         this.contact = response.data;
       });
     } catch (e) {
       console.error("fetchContact error", e);
-      this.error = "Ошибка загрузки контакта";
+      runInAction(() => {
+        this.error = "Ошибка загрузки контакта";
+      });
     }
   }
 
   async updateCompany(id: number, data: Partial<CompanyType>) {
     try {
-      await axios.patch(`${API_URL}/companies/${id}`, data);
+      await api.patch(`${ApiRoute.Company}/${id}`, data);
       this.fetchCompany(id);
     } catch (e) {
       console.error("updateCompany error", e);
-      this.error = "Ошибка при обновлении компании";
+      runInAction(() => {
+        this.error = "Ошибка при обновлении компании";
+      });
     }
   }
 
-  async updateContact(id: number, data: Partial<ContactType>) {
+  async updateContact(id: string, data: Partial<ContactType>) {
     try {
-      await axios.patch(`${API_URL}/contacts/${id}`, data);
-      this.fetchContact(id);
+      const response = await api.patch(`${ApiRoute.Contact}/${id}`, data);
+      runInAction(() => {
+        this.contact = response.data;
+      });
+      return response.data;
     } catch (e) {
       console.error("updateContact error", e);
-      this.error = "Ошибка при обновлении контакта";
+      runInAction(() => {
+        this.error = "Ошибка при обновлении контакта";
+      });
     }
   }
 
@@ -83,41 +101,44 @@ class CompanyStore {
     formData.append("file", file);
 
     try {
-      await axios.post(`${API_URL}/companies/${companyId}/image`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      await api.post(`${ApiRoute.Company}/${companyId}/image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       this.fetchCompany(companyId);
     } catch (e) {
       console.error("uploadImage error", e);
-      this.error = "Ошибка загрузки изображения";
+      runInAction(() => {
+        this.error = "Ошибка загрузки изображения";
+      });
     }
   }
 
   async deleteImage(companyId: number, imageName: string) {
     try {
-      await axios.delete(`${API_URL}/companies/${companyId}/image/${imageName}`);
+      await api.delete(`${ApiRoute.Company}/${companyId}/image/${imageName}`);
       this.fetchCompany(companyId);
     } catch (e) {
       console.error("deleteImage error", e);
-      this.error = "Ошибка удаления изображения";
+      runInAction(() => {
+        this.error = "Ошибка удаления изображения";
+      });
     }
   }
 
   async deleteCompany(companyId: number) {
     try {
-      await axios.delete(`${API_URL}/companies/${companyId}`);
+      await api.delete(`${ApiRoute.Company}/${companyId}`);
       runInAction(() => {
         this.company = null;
         this.contact = null;
       });
     } catch (e) {
       console.error("deleteCompany error", e);
-      this.error = "Ошибка при удалении компании";
+      runInAction(() => {
+        this.error = "Ошибка при удалении компании";
+      });
     }
   }
 }
 
-const companyStore = new CompanyStore();
-export default companyStore;
+export const companyStore = new CompanyStore();

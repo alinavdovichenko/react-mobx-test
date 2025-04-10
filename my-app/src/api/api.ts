@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+  AxiosError,
+} from 'axios';
 import { getToken } from './token';
 import { StatusCodes } from 'http-status-codes';
 import { processErrorHandle } from './process-error-handle';
@@ -12,31 +17,30 @@ const StatusCodeMapping: Record<number, boolean> = {
   [StatusCodes.NOT_FOUND]: true,
 };
 
-const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[response.status];
+const shouldDisplayError = (response: AxiosResponse) =>
+  !!StatusCodeMapping[response.status];
 
-export const createAPI = (): AxiosInstance => {
-  const api = axios.create({
-    baseURL: BACKEND_URL,
-    timeout: REQUEST_TIMEOUT,
-  });
+const createAPI: AxiosInstance = axios.create({
+  baseURL: BACKEND_URL,
+  timeout: REQUEST_TIMEOUT,
+});
 
-  api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const token = getToken();
-    if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+createAPI.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = getToken();
+  if (token && config.headers) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
+
+createAPI.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError<{ message?: string }>) => {
+    if (error.response && shouldDisplayError(error.response)) {
+      processErrorHandle(error.response?.data?.message ?? 'Неизвестная ошибка');
     }
-    return config;
-  });
+    throw error;
+  }
+);
 
-  api.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError<{ message: string }>) => {
-      if (error.response && shouldDisplayError(error.response)) {
-        processErrorHandle(error.response.data.message);
-      }
-      throw error;
-    }
-  );
-
-  return api;
-};
+export { createAPI };

@@ -1,0 +1,63 @@
+# 1. Авторизация GET /auth
+GET https://test-task-api.allfuneral.com/auth?user=USERNAME HTTP/1.1
+
+###
+
+# 2. Получениие инфо об организации GET /companies/ID
+GET https://test-task-api.allfuneral.com/companies/12 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+###
+
+# 3. Обновление данных организации PATCH /companies/ID
+
+PATCH https://test-task-api.allfuneral.com/companies/12 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+Content-Type: application/json
+
+{
+    "name":"Eternal Sun Funeral Home»",
+    "shortName":"ESFH"
+}
+
+###
+
+# 4. Удаление организации DELETE /companies/ID
+
+DELETE https://test-task-api.allfuneral.com/companies/12 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+###
+
+# 5. Добавление изображения POST /companies/ID/image
+POST https://test-task-api.allfuneral.com/companies/12/image HTTP/1.1
+Content-Type: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+"file=@/path/to/file.jpg"
+
+###
+
+# 6. Удаление изображения DELETE /companies/ID/image/IMAGE_NAME
+DELETE https://test-task-api.allfuneral.com/companies/12/image/6387dd7ab672f0acedc9.jpg HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+###
+
+# 7. Получение контакта организации GET /contacts/ID
+GET https://test-task-api.allfuneral.com/contacts/16 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+###
+
+# 8. Обновление контакта организации PATCH /contacts/ID
+PATCH https://test-task-api.allfuneral.com/contacts/16 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE3NDQyMDU2NDUsImV4cCI6MTc0NDgxMDQ0NX0.1oU6eD9GoX7lXCq4DVyEw7ag59uMP-yf7_8OwybpXyk
+
+{
+    "phone":"17025552346"
+}
+
+###

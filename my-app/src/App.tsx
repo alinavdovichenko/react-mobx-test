@@ -1,13 +1,38 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
+import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
-const App = () => {
+import HomePage from './pages/HomePage';
+import { authStore } from './stores/AuthStore';
+import { companyStore } from './stores/CompanyStore';
+
+const App = observer(() => {
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await authStore.login('USERNAME');       // ← логин
+        await companyStore.fetchCompany(12);     // ← загрузка компании
+        await companyStore.fetchContact('16');   // ← загрузка контакта
+        setIsInitialized(true);
+      } catch (e) {
+        console.error('Ошибка инициализации:', e);
+      }
+    };
+
+    init();
+  }, []);
+
+  if (!isInitialized || companyStore.loading) {
+    return <p>Загрузка...</p>;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
     </Routes>
-  )
-}
+  );
+});
 
-export default App
+export default App;
