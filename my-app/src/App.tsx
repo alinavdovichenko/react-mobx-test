@@ -12,9 +12,9 @@ const App = observer(() => {
   useEffect(() => {
     const init = async () => {
       try {
-        await authStore.login('USERNAME');       // ← логин
-        await companyStore.fetchCompany(12);     // ← загрузка компании
-        await companyStore.fetchContact('16');   // ← загрузка контакта
+        await authStore.login('USERNAME');     
+        await companyStore.fetchCompany('12');     
+        await companyStore.fetchContact('16');   
         setIsInitialized(true);
       } catch (e) {
         console.error('Ошибка инициализации:', e);

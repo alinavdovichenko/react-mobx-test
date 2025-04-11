@@ -1,73 +1,99 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { EditIcon, SaveIcon, CancelIcon } from '../Icon';
 import { Button } from '../Buttons';
 import { ButtonVariants } from '../../type/ButtonVariant';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
+import { companyStore } from '../../stores/CompanyStore';
+import { format, parseISO } from 'date-fns';
 
-enum CompanyFields {
-  AGREEMENT_NUMBER = 'agreementNumber',
-  AGREEMENT_DATE = 'agreementDate',
-  BUSINESS_ENTITY = 'businessEntity',
-  COMPANY_TYPE = 'companyType',
-}
+type Option = { value: string; label: string };
 
-const entityOptions = [
+const entityOptions: Option[] = [
   { value: 'sole', label: 'Sole Proprietorship' },
   { value: 'partnership', label: 'Partnership' },
   { value: 'llc', label: 'Limited Liability Company' },
-] as const
+];
 
-const companyTypeOptions = [
-  { value: 'funeral', label: 'Funeral Home' },
-  { value: 'logistics', label: 'Logistics services' },
-  { value: 'burial', label: 'Burial care Contractor' },
-] as const
+const companyTypeOptions: Option[] = [
+  { value: 'funeral_home', label: 'Funeral Home' },
+  { value: 'logistics_services', label: 'Logistics services' },
+  { value: 'burial_care_contractor', label: 'Burial care Contractor' },
+];
 
-type FormDataType = {
-  [CompanyFields.AGREEMENT_NUMBER]: string
-  [CompanyFields.AGREEMENT_DATE]: string
-  [CompanyFields.BUSINESS_ENTITY]: (typeof entityOptions)[number]
-  [CompanyFields.COMPANY_TYPE]: (typeof companyTypeOptions)[number][]
-}
+const CompanyDetailsCard = observer(() => {
+  const company = companyStore.company;
+  const [isEditing, setIsEditing] = useState(false);
 
-const initialFormData: FormDataType = {
-  [CompanyFields.AGREEMENT_NUMBER]: '1624/2-24',
-  [CompanyFields.AGREEMENT_DATE]: '03.12.2024',
-  [CompanyFields.BUSINESS_ENTITY]: entityOptions[1],
-  [CompanyFields.COMPANY_TYPE]: [companyTypeOptions[0], companyTypeOptions[1]],
-}
+  const [agreementNo, setAgreementNo] = useState('');
+  const [agreementDate, setAgreementDate] = useState('');
+  const [displayDate, setDisplayDate] = useState('');
+  const [businessEntity, setBusinessEntity] = useState<Option>(entityOptions[0]);
+  const [companyType, setCompanyType] = useState<Option[]>([]);
 
-const CompanyDetailsCard = () => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState<FormDataType>(initialFormData)
+  useEffect(() => {
+    if (company) {
+      setAgreementNo(company.contract.no);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+      const isoDate = company.contract.issue_date;
+      setAgreementDate(format(parseISO(isoDate), 'yyyy-MM-dd'));
+      setDisplayDate(format(parseISO(isoDate), 'dd.MM.yyyy'));
 
-  const handleEntityChange = (label: string) => {
-    const matched = entityOptions.find(opt => opt.label === label)
-    if (matched) {
-      setFormData(prev => ({ ...prev, [CompanyFields.BUSINESS_ENTITY]: matched }))
+      const entity = entityOptions.find(opt => opt.label === company.businessEntity);
+      if (entity) setBusinessEntity(entity);
+
+      const matchedTypes = companyTypeOptions.filter(opt => company.type.includes(opt.value));
+      setCompanyType(matchedTypes);
     }
-  }
-
-  const handleCompanyTypeChange = (labels: string[]) => {
-    const matched = companyTypeOptions.filter(opt => labels.includes(opt.label))
-    setFormData(prev => ({ ...prev, [CompanyFields.COMPANY_TYPE]: matched }))
-  }
+  }, [company]);
 
   const handleSave = () => {
-    setIsEditing(false)
-    // Save logic
-  }
+    if (!company) return;
+
+    const newDate = format(new Date(agreementDate), 'yyyy-MM-dd');
+    const display = format(new Date(agreementDate), 'dd.MM.yyyy');
+
+    companyStore.updateCompany(company.id, {
+      contract: {
+        no: agreementNo,
+        issue_date: newDate,
+      },
+      businessEntity: businessEntity.label,
+      type: companyType.map(opt => opt.value),
+    });
+
+    setDisplayDate(display);
+    setIsEditing(false);
+  };
 
   const handleCancel = () => {
-    setFormData(initialFormData)
-    setIsEditing(false)
-  }
+    if (!company) return;
+    setIsEditing(false);
+    setAgreementNo(company.contract.no);
+
+    const isoDate = company.contract.issue_date;
+    setAgreementDate(format(parseISO(isoDate), 'yyyy-MM-dd'));
+    setDisplayDate(format(parseISO(isoDate), 'dd.MM.yyyy'));
+
+    const entity = entityOptions.find(opt => opt.label === company.businessEntity);
+    if (entity) setBusinessEntity(entity);
+
+    const matchedTypes = companyTypeOptions.filter(opt => company.type.includes(opt.value));
+    setCompanyType(matchedTypes);
+  };
+
+  const handleEntityChange = (label: string) => {
+    const matched = entityOptions.find(opt => opt.label === label);
+    if (matched) setBusinessEntity(matched);
+  };
+
+  const handleCompanyTypeChange = (labels: string[]) => {
+    const matched = companyTypeOptions.filter(opt => labels.includes(opt.label));
+    setCompanyType(matched);
+  };
+
+  if (!company) return null;
 
   return (
     <section className="card card--details">
@@ -91,24 +117,24 @@ const CompanyDetailsCard = () => {
               <input
                 className="form__input"
                 type="text"
-                name={CompanyFields.AGREEMENT_NUMBER}
-                value={formData[CompanyFields.AGREEMENT_NUMBER]}
-                onChange={handleInputChange}
+                name="agreementNumber"
+                value={agreementNo}
+                onChange={e => setAgreementNo(e.target.value)}
               />
               <label className="form__label form__label--auto">Date:</label>
               <input
                 className="form__input"
-                type="text"
-                name={CompanyFields.AGREEMENT_DATE}
-                value={formData[CompanyFields.AGREEMENT_DATE]}
-                onChange={handleInputChange}
+                type="date"
+                name="agreementDate"
+                value={agreementDate}
+                onChange={e => setAgreementDate(e.target.value)}
               />
             </div>
 
             <div className="form__row">
               <label className="form__label">Business entity:</label>
               <CustomSelect
-                value={formData[CompanyFields.BUSINESS_ENTITY].label}
+                value={businessEntity.label}
                 onChange={handleEntityChange}
                 options={entityOptions.map(opt => opt.label)}
               />
@@ -117,7 +143,7 @@ const CompanyDetailsCard = () => {
             <div className="form__row">
               <label className="form__label">Company type:</label>
               <CustomMultiSelect
-                values={formData[CompanyFields.COMPANY_TYPE].map(opt => opt.label)}
+                values={companyType.map(opt => opt.label)}
                 onChange={handleCompanyTypeChange}
                 options={companyTypeOptions.map(opt => opt.label)}
               />
@@ -127,21 +153,21 @@ const CompanyDetailsCard = () => {
           <div className="grid-container">
             <div className="grid-item label">Agreement:</div>
             <div className="grid-item value">
-              {formData[CompanyFields.AGREEMENT_NUMBER]} <span>/</span> {formData[CompanyFields.AGREEMENT_DATE]}
+              {agreementNo} <span>/</span> {displayDate}
             </div>
 
             <div className="grid-item label">Business entity:</div>
-            <div className="grid-item value">{formData[CompanyFields.BUSINESS_ENTITY].label}</div>
+            <div className="grid-item value">{businessEntity.label}</div>
 
             <div className="grid-item label">Company type:</div>
             <div className="grid-item value">
-              {formData[CompanyFields.COMPANY_TYPE].map(opt => opt.label).join(', ')}
+              {companyType.map(opt => opt.label).join(', ')}
             </div>
           </div>
         )}
       </div>
     </section>
-  )
-}
+  );
+});
 
 export default CompanyDetailsCard;
