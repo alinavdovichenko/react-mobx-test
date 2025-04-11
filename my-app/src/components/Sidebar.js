@@ -1,9 +1,0 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { ContractorIcon, UserIcon, CompanyIcon } from './Icon';
-import { Button } from './Buttons';
-import { ButtonVariants } from '../type/ButtonVariant';
-const Sidebar = () => {
-    const currentYear = new Date().getFullYear();
-    return (_jsxs("aside", { className: "sidebar", children: [_jsxs("div", { className: "sidebar__left-bar", children: [_jsxs("div", { children: [_jsx("div", { className: "sidebar__logo", children: _jsx("img", { src: "/img/Oak_tree_logo.svg", alt: "Logo" }) }), _jsx("div", { className: "sidebar__icon-wrapper", children: _jsx("img", { src: "/img/Company.svg", alt: "Search" }) }), _jsx("div", { className: "sidebar__icon-wrapper", children: _jsx("img", { src: "/img/MagnifyingGlass.svg", alt: "Search" }) })] }), _jsxs("div", { children: [_jsx("div", { className: "sidebar__line-top" }), _jsx("div", { className: "sidebar__icon-wrapper", children: _jsx("img", { src: "/img/Settings.svg", alt: "Settings" }) }), _jsx("div", { className: "sidebar__icon-wrapper", children: _jsx("img", { src: "/img/SignOut.svg", alt: "Sign Out" }) })] })] }), _jsxs("div", { className: "sidebar__main", children: [_jsxs("div", { className: "sidebar__header", children: [_jsx("div", { className: "sidebar__logo-text", children: "Oak Tree Cemetery" }), _jsx("div", { className: "sidebar__role", children: "Process Manager" }), _jsxs("nav", { className: "sidebar__nav", children: [_jsx(Button, { Icon: CompanyIcon, text: "Organizations", variant: ButtonVariants.Filled }), _jsx(Button, { Icon: ContractorIcon, text: "Contractors", variant: ButtonVariants.Outline }), _jsx(Button, { Icon: UserIcon, text: "Clients", variant: ButtonVariants.Outline })] })] }), _jsxs("footer", { className: "sidebar__footer", children: ["All Funeral Services \u00A9 2015-", currentYear] })] })] }));
-};
-export default Sidebar;
