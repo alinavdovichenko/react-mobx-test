@@ -5,7 +5,7 @@ import { Button } from '../Buttons';
 import { ButtonVariants } from '../../type/ButtonVariant';
 import CustomSelect from '../CustomSelect';
 import CustomMultiSelect from '../CustomMultiSelect';
-import { companyStore } from '../../stores/CompanyStore';
+import { companyStore } from "@/stores/CompanyStore";
 import { format, parseISO } from 'date-fns';
 
 type Option = { value: string; label: string };

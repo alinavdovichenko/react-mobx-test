@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { companyStore } from '../stores/CompanyStore';
+import { companyStore } from "@/stores/CompanyStore";
 import EditOrganizationModal from './EditOrganizationModal';
 import RemoveOrganizationModal from './RemoveOrganizationModal';
 

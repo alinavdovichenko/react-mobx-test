@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import HomePage from './pages/HomePage';
 import { authStore } from './stores/AuthStore';
-import { companyStore } from './stores/CompanyStore';
+import { companyStore } from "@/stores/CompanyStore";
 
 const App = observer(() => {
   const [isInitialized, setIsInitialized] = useState(false);

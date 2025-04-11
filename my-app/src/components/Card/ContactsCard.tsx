@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { autorun } from 'mobx';
-import { companyStore } from '../../stores/CompanyStore';
+import { companyStore } from "@/stores/CompanyStore";
 import { EditIcon, SaveIcon, CancelIcon } from '../Icon';
 import { Button } from '../Buttons';
 import { ButtonVariants } from '../../type/ButtonVariant';

@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { AddPhotoIcon, TrashIcon } from "../Icon";
 import { Button } from "../Buttons";
 import { ButtonVariants } from "../../type/ButtonVariant";
-import { companyStore } from "../../stores/CompanyStore";
+import { companyStore } from "@/stores/CompanyStore";
 
 const PhotosCard = observer(() => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
